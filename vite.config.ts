@@ -15,4 +15,15 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  build: {
+    target: "esnext",
+    rollupOptions: {
+      output: {
+        format: "es",
+      },
+    },
+  },
+  worker: {
+    format: "es",
+  },
 });
