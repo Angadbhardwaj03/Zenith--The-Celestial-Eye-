@@ -166,6 +166,7 @@ export default function LeafletMap() {
                         description: 'The largest modular space station in low Earth orbit. Crew of 7 astronauts. Orbits at ~408km altitude.',
                         color: '#38BDF8',
                         icon: '🛰️',
+                        noradId: 25544,
                     });
                 });
         }

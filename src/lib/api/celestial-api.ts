@@ -163,27 +163,25 @@ export function getCelestialBodiesAtLocation(
   const bodies: CelestialBody[] = [];
   const now = new Date();
 
-  // Add ISS if visible
+  // Always add ISS so users can select it to see future pass predictions
   if (issPos) {
     const issAltAz = geoToAltAz(issPos.lat, issPos.lng, issPos.altitude, lat, lng);
-    if (issAltAz.elevation > -5) {
-      bodies.push({
-        id: 'iss',
-        name: 'International Space Station',
-        type: 'iss',
-        lat: issPos.lat,
-        lng: issPos.lng,
-        altitude: issPos.altitude,
-        velocity: issPos.velocity,
-        azimuth: issAltAz.azimuth,
-        elevation: issAltAz.elevation,
-        distance: issAltAz.distance,
-        description: 'The largest modular space station in low Earth orbit',
-        color: '#38BDF8',
-        icon: '🛰️',
-        noradId: 25544,
-      });
-    }
+    bodies.push({
+      id: 'iss',
+      name: 'International Space Station',
+      type: 'iss',
+      lat: issPos.lat,
+      lng: issPos.lng,
+      altitude: issPos.altitude,
+      velocity: issPos.velocity,
+      azimuth: issAltAz.azimuth,
+      elevation: issAltAz.elevation,
+      distance: issAltAz.distance,
+      description: 'The largest modular space station in low Earth orbit',
+      color: '#38BDF8',
+      icon: '🛰️',
+      noradId: 25544,
+    });
   }
 
   // Filter satellites that are above horizon

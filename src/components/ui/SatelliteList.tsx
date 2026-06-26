@@ -12,7 +12,8 @@ export default function SatelliteList() {
 
   const visibleBodies = useMemo(() => {
     if (!userLocation) return [];
-    let bodies = celestialBodies.filter(b => b.elevation !== undefined && b.elevation > 0);
+    // Always show the ISS so it can be clicked for Pass Predictions, filter others by elevation
+    let bodies = celestialBodies.filter(b => b.type === 'iss' || (b.elevation !== undefined && b.elevation > 0));
     if (filter !== 'all') {
       bodies = bodies.filter(b => b.type === filter);
     }
@@ -20,7 +21,7 @@ export default function SatelliteList() {
   }, [celestialBodies, userLocation, filter]);
 
   const counts = useMemo(() => {
-    const visible = celestialBodies.filter(b => b.elevation !== undefined && b.elevation > 0);
+    const visible = celestialBodies.filter(b => b.type === 'iss' || (b.elevation !== undefined && b.elevation > 0));
     return {
       all: visible.length,
       iss: visible.filter(b => b.type === 'iss').length,
@@ -45,9 +46,8 @@ export default function SatelliteList() {
       initial={{ x: -400, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ type: 'spring', damping: 25, stiffness: 180, delay: 0.2 }}
-      className={`fixed left-3 sm:left-4 z-30 glass rounded-2xl overflow-hidden transition-all duration-300 ${
-        isExpanded ? 'top-28 sm:top-32 bottom-24 sm:bottom-28 w-[280px] sm:w-[320px]' : 'bottom-24 sm:bottom-28 w-[56px] sm:w-[60px]'
-      }`}
+      className={`fixed left-3 sm:left-4 z-30 glass rounded-2xl overflow-hidden transition-all duration-300 ${isExpanded ? 'top-28 sm:top-32 bottom-24 sm:bottom-28 w-[280px] sm:w-[320px]' : 'bottom-24 sm:bottom-28 w-[56px] sm:w-[60px]'
+        }`}
     >
       {/* Toggle button */}
       <button
@@ -92,11 +92,10 @@ export default function SatelliteList() {
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`px-2 py-1 rounded-md text-[9px] uppercase tracking-wider font-mono transition-all ${
-                    filter === f
+                  className={`px-2 py-1 rounded-md text-[9px] uppercase tracking-wider font-mono transition-all ${filter === f
                       ? 'bg-cosmic-cyan/20 text-cosmic-cyan'
                       : 'text-stardust/50 hover:text-stardust/80 hover:bg-white/5'
-                  }`}
+                    }`}
                 >
                   {f} {counts[f] > 0 ? `(${counts[f]})` : ''}
                 </button>
@@ -118,11 +117,10 @@ export default function SatelliteList() {
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: i * 0.02 }}
                       onClick={() => setActiveTarget(body)}
-                      className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center gap-2.5 group ${
-                        activeTarget?.id === body.id
+                      className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center gap-2.5 group ${activeTarget?.id === body.id
                           ? 'bg-cosmic-cyan/10 border border-cosmic-cyan/20'
                           : 'hover:bg-white/5 border border-transparent'
-                      }`}
+                        }`}
                     >
                       <span className="text-sm flex-shrink-0">
                         {typeIcons[body.type] || '✨'}
